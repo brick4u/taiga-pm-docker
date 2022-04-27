@@ -1,0 +1,4 @@
+FROM taigaio/taiga-front:6.5.1
+
+ADD 30_config_env_subst.sh /docker-entrypoint.d/30_config_env_subst.sh
+ADD conf.json.template /usr/share/nginx/html/conf.json.template

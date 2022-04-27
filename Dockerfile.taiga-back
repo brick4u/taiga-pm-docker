@@ -1,0 +1,29 @@
+FROM taigaio/taiga-back:6.5.1
+
+RUN pip install taiga-contrib-ldap-auth-ext==0.4.4
+RUN sed -i /taiga-back/settings/config.py -e "s/^DEBUG = False/DEBUG = os.getenv('DEBUG', 'False') == 'True'/" && \
+    echo "" >> /taiga-back/settings/config.py && \
+    echo "#########################################" >> /taiga-back/settings/config.py && \
+    echo "##  LDAP" >> /taiga-back/settings/config.py && \
+    echo "#########################################" >> /taiga-back/settings/config.py && \
+    echo "ENABLE_LDAP_AUTH = os.getenv('ENABLE_LDAP_AUTH', 'False') == 'True'" >> /taiga-back/settings/config.py && \
+    echo "if ENABLE_LDAP_AUTH:" >> /taiga-back/settings/config.py && \
+    echo "    INSTALLED_APPS += ['taiga_contrib_ldap_auth_ext']" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_START_TLS = os.getenv('LDAP_START_TLS', 'False') == 'True'" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_SERVER = os.getenv('LDAP_SERVER')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_PORT = int(os.getenv('LDAP_PORT','389'))" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_BIND_DN = os.getenv('LDAP_BIND_DN')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_BIND_PASSWORD = os.getenv('LDAP_BIND_PASSWORD')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_SEARCH_BASE = os.getenv('LDAP_SEARCH_BASE')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_GROUP_SEARCH_BASE = os.getenv('LDAP_GROUP_SEARCH_BASE')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_GROUP_ADMIN = os.getenv('LDAP_GROUP_ADMIN')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_USERNAME_ATTRIBUTE = os.getenv('LDAP_USERNAME_ATTRIBUTE','uid')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_EMAIL_ATTRIBUTE = os.getenv('LDAP_EMAIL_ATTRIBUTE','mail')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_FULL_NAME_ATTRIBUTE = os.getenv('LDAP_FULL_NAME_ATTRIBUTE','givenName')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_USER_MEMBER_ATTRIBUTE = os.getenv('LDAP_USER_MEMBER_ATTRIBUTE','memberUid')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_GROUP_MEMBER_ATTRIBUTE = os.getenv('LDAP_GROUP_MEMBER_ATTRIBUTE','memberUid')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_FALLBACK = os.getenv('LDAP_FALLBACK','normal')" >> /taiga-back/settings/config.py && \
+    echo "    LDAP_SAVE_LOGIN_PASSWORD = os.getenv('LDAP_SAVE_LOGIN_PASSWORD', 'False') == 'True'" >> /taiga-back/settings/config.py && \
+    echo "    if DEBUG:" >> /taiga-back/settings/config.py && \
+    echo "        print('LDAP auth is enabled')" >> /taiga-back/settings/config.py && \
+    echo "" >> /taiga-back/settings/config.py
