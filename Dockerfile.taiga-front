@@ -1,4 +1,7 @@
+FROM taigaio/taiga-back:6.5.1 as taiga-back
+
 FROM taigaio/taiga-front:6.5.1
 
+COPY --from=taiga-back /taiga-back/static /usr/share/nginx/html/static
 ADD 30_config_env_subst.sh /docker-entrypoint.d/30_config_env_subst.sh
 ADD conf.json.template /usr/share/nginx/html/conf.json.template
